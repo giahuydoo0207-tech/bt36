@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TK5 — Accordion đơn giản</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .accordion{ border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .acc-item + .acc-item{ border-top:1px solid var(--line); }
+  .acc-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 18px; cursor:pointer; background:var(--surface-2);
+    font-weight:600; user-select:none;
+  }
+  .acc-header:hover{ background:#242c46; }
+  .acc-icon{ font-family:var(--mono); color:var(--amber); transition:transform .25s; }
+  .acc-header.active .acc-icon{ transform:rotate(45deg); }
+  .acc-content{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+    background:var(--surface);
+  }
+  .acc-content p{ margin:0; padding:16px 18px; color:var(--muted); font-size:14.5px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="crumb" href="bt36.html">&larr; Về trang chủ</a>
+  <div class="termbar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="path">~/bt36/tk5.html</span>
+    <span class="status ok">● sẵn sàng</span>
+  </div>
+
+  <span class="badge">TK5</span>
+  <h1>Accordion đơn giản</h1>
+  <p class="lead">Bấm vào tiêu đề để trượt nội dung xuống/lên, dùng <code>classList.toggle()</code> kết hợp <code>max-height</code> + <code>transition</code> trong CSS.</p>
+
+  <div class="panel">
+    <div class="accordion" id="accordion">
+      <div class="acc-item">
+        <div class="acc-header">Accordion là gì? <span class="acc-icon">+</span></div>
+        <div class="acc-content"><p>Accordion là một thành phần giao diện cho phép ẩn/hiện nội dung theo từng mục, giúp tiết kiệm không gian hiển thị.</p></div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header">Cách hoạt động <span class="acc-icon">+</span></div>
+        <div class="acc-content"><p>Khi bấm vào tiêu đề, JavaScript sẽ toggle class "active" trên phần nội dung, đồng thời set max-height bằng scrollHeight để tạo hiệu ứng trượt mượt.</p></div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-header">Ứng dụng thực tế <span class="acc-icon">+</span></div>
+        <div class="acc-content"><p>Thường dùng cho mục FAQ, menu điều hướng thu gọn, hoặc bảng thông tin chi tiết sản phẩm.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.acc-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const content = header.nextElementSibling;
+      const isOpen = header.classList.contains('active');
+
+      header.classList.toggle('active');
+
+      if (isOpen) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+    });
+  });
+</script>
+</body>
+</html>

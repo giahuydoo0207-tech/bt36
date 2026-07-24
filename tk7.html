@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TK7 — Tạo chuỗi ngẫu nhiên</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .result-box{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    margin-top:18px;
+  }
+  .result-box .output{ flex:1; margin-top:0; font-size:20px; letter-spacing:.06em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="crumb" href="bt36.html">&larr; Về trang chủ</a>
+  <div class="termbar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="path">~/bt36/tk7.html</span>
+    <span class="status ok">● sẵn sàng</span>
+  </div>
+
+  <span class="badge">TK7</span>
+  <h1>Tạo chuỗi ngẫu nhiên</h1>
+  <p class="lead">Hàm tạo chuỗi mật khẩu ngẫu nhiên dài 8 ký tự, gồm chữ cái thường (a–z) và số (0–9).</p>
+
+  <div class="panel">
+    <button class="btn" id="genBtn">Tạo mật khẩu mới</button>
+    <div class="result-box">
+      <div class="output" id="result">— nhấn nút để tạo —</div>
+      <button class="btn ghost small" id="copyBtn">Sao chép</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function generateRandomString(length = 8) {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
+  const resultEl = document.getElementById('result');
+
+  document.getElementById('genBtn').addEventListener('click', () => {
+    resultEl.textContent = generateRandomString(8);
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const text = resultEl.textContent;
+    if (!text || text.startsWith('—')) return;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtn');
+      const old = btn.textContent;
+      btn.textContent = 'Đã chép!';
+      setTimeout(() => btn.textContent = old, 1200);
+    });
+  });
+</script>
+</body>
+</html>

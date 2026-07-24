@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TK8 — Chuyển đổi màu Hex sang RGB</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .swatch{
+    width:44px; height:44px; border-radius:8px; border:1px solid var(--line);
+    flex-shrink:0; margin-top:22px;
+  }
+  .field-row{ display:flex; gap:14px; align-items:flex-end; }
+  .field-row > div:first-child{ flex:1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="crumb" href="bt36.html">&larr; Về trang chủ</a>
+  <div class="termbar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="path">~/bt36/tk8.html</span>
+    <span class="status ok">● sẵn sàng</span>
+  </div>
+
+  <span class="badge">TK8</span>
+  <h1>Chuyển đổi màu Hex sang RGB</h1>
+  <p class="lead">Nhập mã màu Hex (ví dụ: #FF0000) để nhận giá trị RGB tương ứng (ví dụ: rgb(255, 0, 0)).</p>
+
+  <div class="panel">
+    <div class="field-row">
+      <div>
+        <label for="hexInput">Mã màu Hex</label>
+        <input type="text" id="hexInput" placeholder="#FF0000" value="#FF0000">
+      </div>
+      <div class="swatch" id="swatch"></div>
+    </div>
+    <button class="btn" id="convertBtn" style="margin-top:16px;">Chuyển đổi</button>
+    <div class="output" id="result">rgb(255, 0, 0)</div>
+  </div>
+</div>
+
+<script>
+  function hexToRgb(hex) {
+    hex = hex.trim().replace('#', '');
+    if (hex.length === 3) {
+      hex = hex.split('').map(c => c + c).join('');
+    }
+    if (!/^[0-9a-fA-F]{6}$/.test(hex)) {
+      return null;
+    }
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  const hexInput = document.getElementById('hexInput');
+  const resultEl = document.getElementById('result');
+  const swatch = document.getElementById('swatch');
+
+  function runConvert() {
+    const rgb = hexToRgb(hexInput.value);
+    if (rgb === null) {
+      resultEl.textContent = 'Mã Hex không hợp lệ. Vui lòng nhập dạng #RRGGBB.';
+      resultEl.style.color = 'var(--warn)';
+      swatch.style.background = 'transparent';
+    } else {
+      resultEl.textContent = rgb;
+      resultEl.style.color = 'var(--good)';
+      swatch.style.background = rgb;
+    }
+  }
+
+  document.getElementById('convertBtn').addEventListener('click', runConvert);
+  hexInput.addEventListener('keydown', e => { if (e.key === 'Enter') runConvert(); });
+
+  runConvert();
+</script>
+</body>
+</html>

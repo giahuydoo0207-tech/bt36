@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K6 — Xử lý sự kiện bàn phím</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  #stage{
+    position:relative;
+    height:320px;
+    background:var(--surface-2);
+    border:1px dashed var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:18px;
+  }
+  #box{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    top:136px;
+    width:64px; height:64px;
+    background:linear-gradient(145deg, var(--cobalt), #7d8fff);
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:12px; color:#fff; font-weight:600;
+    box-shadow:0 8px 20px rgba(79,107,255,.35);
+    transition:top .08s linear;
+  }
+  .hint{
+    text-align:center; color:var(--muted); font-size:13px; margin-top:14px; font-family:var(--mono);
+  }
+  kbd{
+    background:var(--surface-2); border:1px solid var(--line); border-radius:5px;
+    padding:1px 7px; font-family:var(--mono); font-size:12px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="crumb" href="bt36.html">&larr; Về trang chủ</a>
+  <div class="termbar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="path">~/bt36/k6.html</span>
+    <span class="status ok">● sẵn sàng</span>
+  </div>
+
+  <span class="badge">K6</span>
+  <h1>Xử lý sự kiện bàn phím</h1>
+  <p class="lead">Lắng nghe sự kiện <code>keydown</code>: nhấn <kbd>↑</kbd> để dịch chuyển khối lên trên, nhấn <kbd>↓</kbd> để dịch chuyển khối xuống dưới.</p>
+
+  <div class="panel">
+    <div id="stage" tabindex="0">
+      <div id="box">y = <span id="posLabel">128</span></div>
+    </div>
+    <p class="hint">Nhấp vào khung phía trên rồi dùng phím mũi tên ↑ / ↓</p>
+  </div>
+</div>
+
+<script>
+  const box = document.getElementById('box');
+  const stage = document.getElementById('stage');
+  const posLabel = document.getElementById('posLabel');
+  const STEP = 12;
+  let top = 128;
+
+  function clampAndApply() {
+    const maxTop = stage.clientHeight - box.clientHeight;
+    top = Math.max(0, Math.min(maxTop, top));
+    box.style.top = top + 'px';
+    posLabel.textContent = top;
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      top -= STEP;
+      clampAndApply();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      top += STEP;
+      clampAndApply();
+    }
+  });
+
+  stage.addEventListener('click', () => stage.focus());
+  clampAndApply();
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K8 — Tính chỉ số BMI và Phân loại</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .cat-pill{
+    display:inline-block; padding:3px 12px; border-radius:999px;
+    font-family:var(--mono); font-size:12.5px; font-weight:600; margin-top:8px;
+  }
+  .cat-low{ background:rgba(255,184,107,.18); color:var(--amber); }
+  .cat-normal{ background:rgba(110,231,183,.18); color:var(--good); }
+  .cat-high{ background:rgba(255,143,107,.18); color:var(--warn); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="crumb" href="bt36.html">&larr; Về trang chủ</a>
+  <div class="termbar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="path">~/bt36/k8.html</span>
+    <span class="status ok">● sẵn sàng</span>
+  </div>
+
+  <span class="badge">K8</span>
+  <h1>Tính chỉ số BMI và Phân loại</h1>
+  <p class="lead">Nhập cân nặng (kg) và chiều cao (m) để tính chỉ số BMI và xem phân loại: Thiếu cân, Bình thường hoặc Thừa cân.</p>
+
+  <div class="panel">
+    <div class="row">
+      <div>
+        <label for="weight">Cân nặng (kg)</label>
+        <input type="number" id="weight" placeholder="65" step="0.1" min="0">
+      </div>
+      <div>
+        <label for="height">Chiều cao (m)</label>
+        <input type="number" id="height" placeholder="1.70" step="0.01" min="0">
+      </div>
+    </div>
+    <button class="btn" id="calcBtn" style="margin-top:16px;">Tính BMI</button>
+    <div class="output" id="result">— nhập số liệu và bấm Tính BMI —</div>
+  </div>
+</div>
+
+<script>
+  function classifyBmi(bmi) {
+    if (bmi < 18.5) return { label: 'Thiếu cân', cls: 'cat-low' };
+    if (bmi < 25) return { label: 'Bình thường', cls: 'cat-normal' };
+    return { label: 'Thừa cân', cls: 'cat-high' };
+  }
+
+  document.getElementById('calcBtn').addEventListener('click', () => {
+    const weight = parseFloat(document.getElementById('weight').value);
+    const height = parseFloat(document.getElementById('height').value);
+    const resultEl = document.getElementById('result');
+
+    if (!weight || !height || weight <= 0 || height <= 0) {
+      resultEl.innerHTML = 'Vui lòng nhập cân nặng và chiều cao hợp lệ.';
+      resultEl.style.color = 'var(--warn)';
+      return;
+    }
+
+    const bmi = weight / (height * height);
+    const { label, cls } = classifyBmi(bmi);
+
+    resultEl.style.color = 'var(--text)';
+    resultEl.innerHTML = `BMI = ${bmi.toFixed(1)}<br><span class="cat-pill ${cls}">${label}</span>`;
+  });
+</script>
+</body>
+</html>

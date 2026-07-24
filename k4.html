@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K4 — Phân trang danh sách</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  #itemList{ list-style:none; margin:0; padding:0; }
+  #itemList li{
+    padding:11px 14px; border-bottom:1px solid var(--line);
+    font-family:var(--mono); font-size:14px;
+  }
+  #itemList li:last-child{ border-bottom:none; }
+  .pagination{ display:flex; gap:6px; flex-wrap:wrap; margin-top:20px; }
+  .page-btn{
+    min-width:36px; text-align:center;
+    background:var(--surface-2); border:1px solid var(--line); color:var(--text);
+    border-radius:8px; padding:8px 10px; cursor:pointer; font-family:var(--mono); font-size:13.5px;
+  }
+  .page-btn:hover{ border-color:var(--cobalt); }
+  .page-btn.active{ background:var(--cobalt); border-color:var(--cobalt); color:#fff; font-weight:600; }
+  .page-btn:disabled{ opacity:.4; cursor:not-allowed; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="crumb" href="bt36.html">&larr; Về trang chủ</a>
+  <div class="termbar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="path">~/bt36/k4.html</span>
+    <span class="status ok">● sẵn sàng</span>
+  </div>
+
+  <span class="badge">K4</span>
+  <h1>Phân trang danh sách</h1>
+  <p class="lead">Danh sách 50 mục, hiển thị 10 mục mỗi trang. Bấm vào số trang để cập nhật danh sách hiển thị tương ứng.</p>
+
+  <div class="panel">
+    <ul id="itemList"></ul>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+
+<script>
+  const TOTAL_ITEMS = 50;
+  const ITEMS_PER_PAGE = 10;
+  const items = Array.from({ length: TOTAL_ITEMS }, (_, i) => `Mục số ${i + 1}`);
+  let currentPage = 1;
+  const totalPages = Math.ceil(TOTAL_ITEMS / ITEMS_PER_PAGE);
+
+  function renderList(page) {
+    const listEl = document.getElementById('itemList');
+    listEl.innerHTML = '';
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const pageItems = items.slice(start, start + ITEMS_PER_PAGE);
+    pageItems.forEach(text => {
+      const li = document.createElement('li');
+      li.textContent = text;
+      listEl.appendChild(li);
+    });
+  }
+
+  function renderPagination(page) {
+    const pagEl = document.getElementById('pagination');
+    pagEl.innerHTML = '';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'page-btn';
+    prevBtn.textContent = '‹';
+    prevBtn.disabled = page === 1;
+    prevBtn.addEventListener('click', () => goToPage(page - 1));
+    pagEl.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'page-btn' + (i === page ? ' active' : '');
+      btn.textContent = i;
+      btn.addEventListener('click', () => goToPage(i));
+      pagEl.appendChild(btn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'page-btn';
+    nextBtn.textContent = '›';
+    nextBtn.disabled = page === totalPages;
+    nextBtn.addEventListener('click', () => goToPage(page + 1));
+    pagEl.appendChild(nextBtn);
+  }
+
+  function goToPage(page) {
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderList(currentPage);
+    renderPagination(currentPage);
+  }
+
+  renderList(currentPage);
+  renderPagination(currentPage);
+</script>
+</body>
+</html>
